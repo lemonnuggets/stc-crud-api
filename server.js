@@ -8,7 +8,11 @@ const dbURI = `mongodb+srv://${process.env.MONGO_USERNAME || "lemonnuggets"}:${
     process.env.MONGO_PASSWORD
 }@users.8hezs.mongodb.net/stc-crud?retryWrites=true&w=majority`;
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(dbURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+});
 const db = mongoose.connection;
 db.on("error", () => {
     console.log("Error connecting to db");
