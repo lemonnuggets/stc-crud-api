@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    refreshTokens: {
+        type: Array,
+        default: [],
+    },
 });
 
 userSchema.statics.findByUsername = function (username) {
