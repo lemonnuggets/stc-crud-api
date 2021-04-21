@@ -6,8 +6,7 @@ const mongoose = require("mongoose");
 
 const dbURI = `mongodb+srv://${process.env.MONGO_USERNAME || "lemonnuggets"}:${
     process.env.MONGO_PASSWORD
-}@users.8hezs.mongodb.net/stc-crud?retryWrites=true&w=majority`;
-
+}@cluster0.m9vuh.mongodb.net/stc-crud?retryWrites=true&w=majority`;
 mongoose.connect(dbURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
