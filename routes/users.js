@@ -1,32 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user");
+const User = require("../models/User");
 
-const getUserById = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.params.id);
-        if (user === null) {
-            return res.status(404).json({ message: "No such user" });
-        }
-        req.user = user;
-        next();
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-};
+const { authenticateToken } = require("./auth");
 
-const getUserByUsername = async (req, res, next) => {
-    try {
-        const user = await User.findByUsername(req.params.username);
-        req.user = user;
-        next();
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-};
-
-router.get("/", async (req, res) => {
+router.get("/", authenticateToken, async (req, res) => {
     try {
         const users = await User.find();
         res.json(users);
@@ -35,11 +14,11 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:id", getUserById, async (req, res) => {
+router.get("/:id", authenticateToken, async (req, res) => {
     res.status(200).json(req.user);
 });
 
-router.delete("/:id", getUserById, async (req, res) => {
+router.delete("/:id", authenticateToken, async (req, res) => {
     try {
         await req.user.remove();
         res.status(200).json({ message: "Successfully deleted user" });
@@ -48,7 +27,7 @@ router.delete("/:id", getUserById, async (req, res) => {
     }
 });
 
-router.patch("/:id", getUserById, async (req, res) => {
+router.patch("/:id", authenticateToken, async (req, res) => {
     if (req.body.username !== undefined) {
         req.user.username = req.body.username;
     }
@@ -70,7 +49,7 @@ router.post("/", async (req, res) => {
     const user = new User({
         name: req.body.name,
         password: req.body.password,
-        admin: req.body.admin,
+        accessLevel: req.body.accessLevel,
         username: req.body.username,
     });
     try {
@@ -81,4 +60,4 @@ router.post("/", async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports.usersRouter = router;

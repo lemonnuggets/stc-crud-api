@@ -13,15 +13,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    admin: {
-        type: Boolean,
-        default: false,
+    accessLevel: {
+        type: Number,
+        default: 0,
     },
-    posts: [{ body: String, date: Date }],
 });
 
-userSchema.statics.findByUsername = async (username) => {
-    return this.find({ username });
+userSchema.statics.findByUsername = function (username) {
+    return this.findOne({ username });
 };
 
 module.exports = mongoose.model("User", userSchema);

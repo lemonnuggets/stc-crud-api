@@ -23,8 +23,10 @@ db.once("open", () => {
 
 app.use(express.json());
 
-const usersRoute = require("./routes/users");
-app.use("/users", usersRoute);
+const { usersRouter } = require("./routes/users");
+app.use("/users", usersRouter);
+const { authRouter } = require("./routes/auth");
+app.use("/auth", authRouter);
 
 app.get("/", (req, res) => {
     res.send("at homepage");
